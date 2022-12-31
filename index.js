@@ -52,6 +52,32 @@ async function run() {
             const orders = await cursor.toArray();
             res.send(orders);
         })
+
+        app.patch('/orders/:id', async (req, res) => {
+            const id = req.params.id;
+            const status = req.body.status;
+            const query = {
+                _id: ObjectId(id)
+            };
+            const updatedOrder = {
+                $set:{
+                    status: status
+                }
+            }
+            const result = await orderedCollection.updateOne(query, updatedOrder);
+            res.send(result);
+            console.log(result);
+        })
+
+        app.delete('/orders/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = {
+                _id: ObjectId(id)
+            };
+            const result = await orderedCollection.deleteOne(query);
+            res.send(result);
+            console.log(result);
+        })
     }
     
     finally {
